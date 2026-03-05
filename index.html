@@ -1,0 +1,966 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>APEX BODY — Programas de Fitness y Nutrición</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --black: #0f0f0f;
+    --white: #fafafa;
+    --accent: #c85a00;
+    --accent-light: #f07030;
+    --gray: #6b6b6b;
+    --gray-light: #f2f0ed;
+    --border: #e0ddd9;
+    --card-bg: #ffffff;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--white);
+    color: var(--black);
+    overflow-x: hidden;
+  }
+
+  /* ─── NAV ─── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 5%;
+    height: 64px;
+    background: rgba(250,250,250,0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.4rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    color: var(--black);
+    text-decoration: none;
+    text-transform: uppercase;
+  }
+  .nav-logo span { color: var(--accent); }
+  .nav-links { display: flex; gap: 2rem; list-style: none; }
+  .nav-links a {
+    font-size: 0.82rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--gray);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--black); }
+  .nav-cta {
+    background: var(--black);
+    color: var(--white) !important;
+    padding: 0.5rem 1.2rem;
+    border-radius: 2px;
+    font-size: 0.78rem !important;
+    font-weight: 600 !important;
+    letter-spacing: 0.1em !important;
+    transition: background 0.2s !important;
+  }
+  .nav-cta:hover { background: var(--accent) !important; color: var(--white) !important; }
+
+  /* ─── HERO ─── */
+  .hero {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    padding-top: 64px;
+  }
+  .hero-left {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 8% 6% 8% 8%;
+  }
+  .hero-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 1.8rem;
+  }
+  .hero-tag::before {
+    content: '';
+    display: block;
+    width: 28px; height: 1px;
+    background: var(--accent);
+  }
+  .hero h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(3.2rem, 6vw, 5.5rem);
+    font-weight: 300;
+    line-height: 1.05;
+    letter-spacing: -0.01em;
+    margin-bottom: 1.6rem;
+  }
+  .hero h1 em {
+    font-style: italic;
+    font-weight: 600;
+    color: var(--accent);
+  }
+  .hero-desc {
+    font-size: 1rem;
+    font-weight: 300;
+    color: var(--gray);
+    line-height: 1.75;
+    max-width: 420px;
+    margin-bottom: 2.4rem;
+  }
+  .hero-actions { display: flex; gap: 1rem; align-items: center; }
+  .btn-primary {
+    display: inline-block;
+    background: var(--black);
+    color: var(--white);
+    padding: 0.9rem 2rem;
+    font-size: 0.82rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    text-decoration: none;
+    border-radius: 2px;
+    transition: background 0.25s, transform 0.2s;
+  }
+  .btn-primary:hover { background: var(--accent); transform: translateY(-1px); }
+  .btn-ghost {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.82rem;
+    font-weight: 500;
+    color: var(--gray);
+    text-decoration: none;
+    letter-spacing: 0.05em;
+    transition: color 0.2s;
+  }
+  .btn-ghost:hover { color: var(--black); }
+  .btn-ghost svg { transition: transform 0.2s; }
+  .btn-ghost:hover svg { transform: translateX(3px); }
+
+  .hero-stats {
+    display: flex;
+    gap: 2.5rem;
+    margin-top: 3.5rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--border);
+  }
+  .stat-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2rem;
+    font-weight: 700;
+    line-height: 1;
+    margin-bottom: 0.2rem;
+  }
+  .stat-label {
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--gray);
+  }
+
+  .hero-right {
+    background: var(--gray-light);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero-img-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    padding: 10%;
+    width: 100%;
+  }
+  .hero-img-card {
+    background: var(--white);
+    border-radius: 4px;
+    overflow: hidden;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+    aspect-ratio: 3/4;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 1.2rem;
+    position: relative;
+    transition: transform 0.3s;
+  }
+  .hero-img-card:hover { transform: translateY(-4px); }
+  .hero-img-card:nth-child(1) { margin-top: 2rem; background: linear-gradient(160deg, #1a1a1a 0%, #2d2d2d 100%); }
+  .hero-img-card:nth-child(2) { background: linear-gradient(160deg, #2a1a0a 0%, #4a2e10 100%); }
+  .hero-img-card:nth-child(3) { background: linear-gradient(160deg, #0a1a0a 0%, #1a3020 100%); }
+  .hero-img-card:nth-child(4) { margin-top: -2rem; background: linear-gradient(160deg, #1a0a1a 0%, #301030 100%); }
+
+  .card-icon {
+    font-size: 2rem;
+    margin-bottom: 0.8rem;
+    opacity: 0.9;
+  }
+  .card-mini-title {
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--white);
+    opacity: 0.9;
+  }
+  .card-mini-cat {
+    font-size: 0.65rem;
+    color: rgba(255,255,255,0.5);
+    letter-spacing: 0.08em;
+    margin-top: 0.2rem;
+  }
+  .card-price-badge {
+    position: absolute;
+    top: 0.8rem; right: 0.8rem;
+    background: var(--accent);
+    color: white;
+    font-size: 0.7rem;
+    font-weight: 700;
+    padding: 0.25rem 0.6rem;
+    border-radius: 2px;
+    letter-spacing: 0.05em;
+  }
+
+  /* ─── BAND ─── */
+  .band {
+    background: var(--black);
+    color: var(--white);
+    padding: 1.1rem 5%;
+    display: flex;
+    align-items: center;
+    gap: 3rem;
+    overflow: hidden;
+  }
+  .band-items {
+    display: flex;
+    gap: 3rem;
+    animation: marquee 18s linear infinite;
+    white-space: nowrap;
+  }
+  @keyframes marquee {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+  .band-item {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    opacity: 0.85;
+  }
+  .band-dot { width: 4px; height: 4px; background: var(--accent); border-radius: 50%; }
+
+  /* ─── PRODUCTS ─── */
+  section { padding: 6rem 8%; }
+  .section-header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    margin-bottom: 3.5rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .section-tag {
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 0.6rem;
+  }
+  .section-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 400;
+    line-height: 1.1;
+  }
+  .section-title em { font-style: italic; font-weight: 700; }
+  .view-all {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.8rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    color: var(--gray);
+    text-decoration: none;
+    text-transform: uppercase;
+    transition: color 0.2s;
+  }
+  .view-all:hover { color: var(--black); }
+
+  .products-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .product-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+    transition: box-shadow 0.3s, transform 0.3s;
+    cursor: pointer;
+  }
+  .product-card:hover {
+    box-shadow: 0 12px 40px rgba(0,0,0,0.1);
+    transform: translateY(-4px);
+  }
+  .product-cover {
+    aspect-ratio: 4/3;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .cover-1 { background: linear-gradient(135deg, #0f0f0f 0%, #2d2d2d 60%, #1a1a1a 100%); }
+  .cover-2 { background: linear-gradient(135deg, #0a1520 0%, #1a3040 60%, #0f2535 100%); }
+  .cover-3 { background: linear-gradient(135deg, #1a0a00 0%, #3d1f00 60%, #2a1500 100%); }
+  .cover-4 { background: linear-gradient(135deg, #0a0a1a 0%, #1a1a3a 60%, #0f0f2a 100%); }
+  .cover-5 { background: linear-gradient(135deg, #0a1a0a 0%, #1a3020 60%, #102010 100%); }
+  .cover-6 { background: linear-gradient(135deg, #1a0a10 0%, #3a1020 60%, #280a18 100%); }
+
+  .cover-inner {
+    text-align: center;
+    padding: 1.5rem;
+  }
+  .cover-icon { font-size: 3rem; margin-bottom: 0.8rem; opacity: 0.9; }
+  .cover-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: white;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    line-height: 1.2;
+  }
+  .cover-sub {
+    font-size: 0.65rem;
+    color: rgba(255,255,255,0.5);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-top: 0.3rem;
+  }
+  .product-badge {
+    position: absolute;
+    top: 0.8rem; left: 0.8rem;
+    background: var(--accent);
+    color: white;
+    font-size: 0.65rem;
+    font-weight: 700;
+    padding: 0.2rem 0.5rem;
+    border-radius: 2px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+  .badge-new { background: #2d7a2d; }
+  .badge-best { background: var(--accent); }
+
+  .product-info { padding: 1.2rem; }
+  .product-type {
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 0.4rem;
+  }
+  .product-name {
+    font-size: 0.98rem;
+    font-weight: 600;
+    line-height: 1.35;
+    margin-bottom: 0.5rem;
+    color: var(--black);
+  }
+  .product-desc {
+    font-size: 0.8rem;
+    color: var(--gray);
+    line-height: 1.6;
+    margin-bottom: 1rem;
+  }
+  .product-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 0.8rem;
+    border-top: 1px solid var(--border);
+  }
+  .product-price {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--black);
+  }
+  .product-price .currency {
+    font-size: 0.8rem;
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 500;
+    vertical-align: super;
+    color: var(--gray);
+  }
+  .add-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    background: var(--black);
+    color: var(--white);
+    border: none;
+    padding: 0.55rem 1rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    border-radius: 2px;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .add-btn:hover { background: var(--accent); }
+
+  /* ─── ABOUT STRIP ─── */
+  .about-strip {
+    background: var(--gray-light);
+    padding: 5rem 8%;
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    gap: 6rem;
+    align-items: center;
+  }
+  .about-strip h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 400;
+    line-height: 1.1;
+    margin-bottom: 1.5rem;
+  }
+  .about-strip h2 em { font-style: italic; font-weight: 700; color: var(--accent); }
+  .about-strip p {
+    font-size: 0.95rem;
+    font-weight: 300;
+    color: var(--gray);
+    line-height: 1.8;
+    margin-bottom: 2rem;
+  }
+  .pillars {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+  }
+  .pillar {
+    padding: 1.4rem;
+    background: var(--white);
+    border-radius: 4px;
+    border: 1px solid var(--border);
+  }
+  .pillar-icon { font-size: 1.5rem; margin-bottom: 0.6rem; }
+  .pillar-title { font-size: 0.85rem; font-weight: 600; margin-bottom: 0.3rem; }
+  .pillar-text { font-size: 0.78rem; color: var(--gray); line-height: 1.6; }
+
+  /* ─── TESTIMONIALS ─── */
+  .testimonials-section { background: var(--white); }
+  .testimonials-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+  }
+  .testimonial {
+    padding: 2rem;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    background: var(--card-bg);
+    transition: box-shadow 0.3s;
+  }
+  .testimonial:hover { box-shadow: 0 8px 30px rgba(0,0,0,0.06); }
+  .stars {
+    color: var(--accent);
+    font-size: 0.85rem;
+    letter-spacing: 0.1em;
+    margin-bottom: 1rem;
+  }
+  .testimonial-text {
+    font-size: 0.9rem;
+    line-height: 1.75;
+    color: var(--black);
+    margin-bottom: 1.5rem;
+    font-style: italic;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.05rem;
+    font-weight: 400;
+  }
+  .testimonial-author {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+  }
+  .author-avatar {
+    width: 38px; height: 38px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: white;
+  }
+  .av1 { background: linear-gradient(135deg, #c85a00, #f07030); }
+  .av2 { background: linear-gradient(135deg, #1a3040, #2d7a2d); }
+  .av3 { background: linear-gradient(135deg, #3d1f00, #c85a00); }
+  .author-name { font-size: 0.85rem; font-weight: 600; }
+  .author-result { font-size: 0.72rem; color: var(--accent); font-weight: 600; letter-spacing: 0.05em; }
+
+  /* ─── CTA ─── */
+  .cta-section {
+    background: var(--black);
+    color: var(--white);
+    padding: 6rem 8%;
+    text-align: center;
+  }
+  .cta-section .section-tag { color: var(--accent-light); justify-content: center; display: flex; }
+  .cta-section h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    font-weight: 300;
+    line-height: 1.1;
+    margin: 1rem 0 1.5rem;
+  }
+  .cta-section h2 em { font-style: italic; font-weight: 700; color: var(--accent-light); }
+  .cta-section p {
+    font-size: 1rem;
+    color: rgba(255,255,255,0.6);
+    max-width: 500px;
+    margin: 0 auto 2.5rem;
+    line-height: 1.7;
+  }
+  .btn-primary-light {
+    display: inline-block;
+    background: var(--accent);
+    color: var(--white);
+    padding: 1rem 2.5rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    text-decoration: none;
+    border-radius: 2px;
+    transition: background 0.25s, transform 0.2s;
+  }
+  .btn-primary-light:hover { background: var(--accent-light); transform: translateY(-2px); }
+
+  /* ─── FOOTER ─── */
+  footer {
+    background: #0a0a0a;
+    color: rgba(255,255,255,0.5);
+    padding: 3rem 8%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1rem;
+    border-top: 1px solid rgba(255,255,255,0.06);
+  }
+  .footer-logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.2rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: white;
+    text-decoration: none;
+  }
+  .footer-logo span { color: var(--accent); }
+  footer p { font-size: 0.78rem; }
+  .footer-links { display: flex; gap: 1.5rem; }
+  .footer-links a {
+    font-size: 0.78rem;
+    color: rgba(255,255,255,0.4);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .footer-links a:hover { color: white; }
+
+  /* ─── SCROLL ANIMATIONS ─── */
+  .fade-up {
+    opacity: 0;
+    transform: translateY(28px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .fade-up.visible { opacity: 1; transform: translateY(0); }
+
+  /* ─── RESPONSIVE ─── */
+  @media (max-width: 900px) {
+    .hero { grid-template-columns: 1fr; }
+    .hero-right { display: none; }
+    .nav-links { display: none; }
+    .testimonials-grid { grid-template-columns: 1fr; }
+    .about-strip { grid-template-columns: 1fr; gap: 3rem; }
+    .section-header { flex-direction: column; align-items: flex-start; gap: 1rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">Apex<span>.</span>Body</a>
+  <ul class="nav-links">
+    <li><a href="#productos">Productos</a></li>
+    <li><a href="#nosotros">Nosotros</a></li>
+    <li><a href="#resultados">Resultados</a></li>
+    <li><a href="#productos" class="nav-cta">Ver programas</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-left">
+    <div class="hero-tag">Ciencia aplicada al fitness</div>
+    <h1>Tu cuerpo.<br><em>Tu mejor</em><br>versión.</h1>
+    <p class="hero-desc">Programas de entrenamiento y nutrición diseñados con evidencia científica. Sin promesas vacías, sin sufrimiento innecesario.</p>
+    <div class="hero-actions">
+      <a href="#productos" class="btn-primary">Ver programas</a>
+      <a href="#resultados" class="btn-ghost">
+        Ver resultados
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+    </div>
+    <div class="hero-stats">
+      <div>
+        <div class="stat-num">+12k</div>
+        <div class="stat-label">Alumnos activos</div>
+      </div>
+      <div>
+        <div class="stat-num">4.9★</div>
+        <div class="stat-label">Valoración media</div>
+      </div>
+      <div>
+        <div class="stat-num">−12kg</div>
+        <div class="stat-label">Resultado promedio</div>
+      </div>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="hero-img-grid">
+      <div class="hero-img-card">
+        <span class="card-price-badge">$29</span>
+        <div class="card-icon">📖</div>
+        <div class="card-mini-title">Fat Loss Code</div>
+        <div class="card-mini-cat">Ebook · Nutrición</div>
+      </div>
+      <div class="hero-img-card">
+        <span class="card-price-badge">$49</span>
+        <div class="card-icon">🏋️</div>
+        <div class="card-mini-title">Muscle Blueprint</div>
+        <div class="card-mini-cat">Rutina · Hipertrofia</div>
+      </div>
+      <div class="hero-img-card">
+        <span class="card-price-badge">$39</span>
+        <div class="card-icon">⚡</div>
+        <div class="card-mini-title">Training Mastery</div>
+        <div class="card-mini-cat">Curso · Técnica</div>
+      </div>
+      <div class="hero-img-card">
+        <span class="card-price-badge">$99</span>
+        <div class="card-icon">👑</div>
+        <div class="card-mini-title">Apex Club</div>
+        <div class="card-mini-cat">Membresía · Premium</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BAND -->
+<div class="band">
+  <div class="band-items">
+    <span class="band-item"><span class="band-dot"></span>100% basado en ciencia</span>
+    <span class="band-item"><span class="band-dot"></span>Resultados comprobados</span>
+    <span class="band-item"><span class="band-dot"></span>Más de 12.000 alumnos</span>
+    <span class="band-item"><span class="band-dot"></span>Acceso inmediato</span>
+    <span class="band-item"><span class="band-dot"></span>Garantía 30 días</span>
+    <span class="band-item"><span class="band-dot"></span>Soporte personalizado</span>
+    <span class="band-item"><span class="band-dot"></span>100% basado en ciencia</span>
+    <span class="band-item"><span class="band-dot"></span>Resultados comprobados</span>
+    <span class="band-item"><span class="band-dot"></span>Más de 12.000 alumnos</span>
+    <span class="band-item"><span class="band-dot"></span>Acceso inmediato</span>
+    <span class="band-item"><span class="band-dot"></span>Garantía 30 días</span>
+    <span class="band-item"><span class="band-dot"></span>Soporte personalizado</span>
+  </div>
+</div>
+
+<!-- PRODUCTS -->
+<section id="productos">
+  <div class="section-header fade-up">
+    <div>
+      <div class="section-tag">Nuestros programas</div>
+      <h2 class="section-title">Todo lo que necesitás<br><em>para transformarte</em></h2>
+    </div>
+    <a href="#" class="view-all">Ver todo
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+    </a>
+  </div>
+
+  <div class="products-grid">
+
+    <div class="product-card fade-up">
+      <div class="product-cover cover-1">
+        <span class="product-badge badge-best">Más vendido</span>
+        <div class="cover-inner">
+          <div class="cover-icon">📖</div>
+          <div class="cover-name">Fat Loss<br>Code</div>
+          <div class="cover-sub">Apex Body</div>
+        </div>
+      </div>
+      <div class="product-info">
+        <div class="product-type">Ebook · Nutrición</div>
+        <div class="product-name">Fat Loss Code — El método científico para perder grasa</div>
+        <div class="product-desc">12 semanas. −12kg promedio. Déficit calórico inteligente, macros optimizados y plan semana a semana.</div>
+        <div class="product-footer">
+          <div class="product-price"><span class="currency">$</span>29</div>
+          <button class="add-btn">Comprar
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="product-card fade-up">
+      <div class="product-cover cover-2">
+        <span class="product-badge badge-new">Nuevo</span>
+        <div class="cover-inner">
+          <div class="cover-icon">🏋️</div>
+          <div class="cover-name">Muscle<br>Blueprint</div>
+          <div class="cover-sub">Apex Body</div>
+        </div>
+      </div>
+      <div class="product-info">
+        <div class="product-type">Rutina · Hipertrofia</div>
+        <div class="product-name">Muscle Blueprint — Guía completa para ganar músculo</div>
+        <div class="product-desc">Rutina de 16 semanas basada en progresión de carga, volumen óptimo y periodización científica.</div>
+        <div class="product-footer">
+          <div class="product-price"><span class="currency">$</span>49</div>
+          <button class="add-btn">Comprar
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="product-card fade-up">
+      <div class="product-cover cover-3">
+        <div class="cover-inner">
+          <div class="cover-icon">⚡</div>
+          <div class="cover-name">Training<br>Mastery</div>
+          <div class="cover-sub">Apex Body</div>
+        </div>
+      </div>
+      <div class="product-info">
+        <div class="product-type">Curso · Técnica</div>
+        <div class="product-name">Training Mastery — Técnica perfecta en cada ejercicio</div>
+        <div class="product-desc">Video curso con más de 80 ejercicios explicados. Evitá lesiones y maximizá cada repetición.</div>
+        <div class="product-footer">
+          <div class="product-price"><span class="currency">$</span>39</div>
+          <button class="add-btn">Comprar
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="product-card fade-up">
+      <div class="product-cover cover-4">
+        <div class="cover-inner">
+          <div class="cover-icon">📊</div>
+          <div class="cover-name">Mass<br>Protocol</div>
+          <div class="cover-sub">Apex Body</div>
+        </div>
+      </div>
+      <div class="product-info">
+        <div class="product-type">Rutina · Volumen</div>
+        <div class="product-name">Mass Protocol — Rutina de volumen para máxima masa</div>
+        <div class="product-desc">Plan de 12 semanas diseñado para ganar masa muscular de forma efectiva con superávit controlado.</div>
+        <div class="product-footer">
+          <div class="product-price"><span class="currency">$</span>44</div>
+          <button class="add-btn">Comprar
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="product-card fade-up">
+      <div class="product-cover cover-5">
+        <div class="cover-inner">
+          <div class="cover-icon">🥗</div>
+          <div class="cover-name">Nutrition<br>Guide</div>
+          <div class="cover-sub">Apex Body</div>
+        </div>
+      </div>
+      <div class="product-info">
+        <div class="product-type">Ebook · Nutrición</div>
+        <div class="product-name">Nutrition Guide — Come bien sin obsesionarte</div>
+        <div class="product-desc">Aprende a armar tus propios menús, calcular macros y comer de forma sostenible de por vida.</div>
+        <div class="product-footer">
+          <div class="product-price"><span class="currency">$</span>24</div>
+          <button class="add-btn">Comprar
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="product-card fade-up" style="border-color: var(--accent); position:relative;">
+      <div style="position:absolute;top:0;left:0;right:0;height:3px;background:var(--accent);"></div>
+      <div class="product-cover" style="background:linear-gradient(135deg,#1a0800,#3a1a00,#c85a00);">
+        <span class="product-badge badge-best">Todo incluido</span>
+        <div class="cover-inner">
+          <div class="cover-icon">👑</div>
+          <div class="cover-name">Apex<br>Club</div>
+          <div class="cover-sub">Membresía Premium</div>
+        </div>
+      </div>
+      <div class="product-info">
+        <div class="product-type" style="color:var(--accent);">Membresía · Comunidad Premium</div>
+        <div class="product-name">Apex Body Club — Acceso completo a todo</div>
+        <div class="product-desc">Todos los programas + comunidad privada + soporte directo con entrenadores + actualizaciones de por vida.</div>
+        <div class="product-footer">
+          <div class="product-price"><span class="currency">$</span>99</div>
+          <button class="add-btn" style="background:var(--accent);">Unirme
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ABOUT -->
+<div class="about-strip" id="nosotros">
+  <div class="fade-up">
+    <div class="section-tag">Quiénes somos</div>
+    <h2>Entrenadores reales.<br><em>Ciencia real.</em></h2>
+    <p>En APEX BODY no inventamos nada. Aplicamos lo que la investigación científica ya demostró que funciona, en un formato accesible para cualquier persona con ganas de mejorar.</p>
+    <a href="#productos" class="btn-primary">Ver todos los programas</a>
+  </div>
+  <div class="pillars fade-up">
+    <div class="pillar">
+      <div class="pillar-icon">🔬</div>
+      <div class="pillar-title">Evidencia científica</div>
+      <div class="pillar-text">Cada protocolo está respaldado por estudios peer-reviewed. Sin mitos, sin pseudociencia.</div>
+    </div>
+    <div class="pillar">
+      <div class="pillar-icon">📈</div>
+      <div class="pillar-title">Resultados medibles</div>
+      <div class="pillar-text">Métricas claras desde el día 1. Sabés exactamente qué esperar y cuándo.</div>
+    </div>
+    <div class="pillar">
+      <div class="pillar-icon">🎯</div>
+      <div class="pillar-title">Acceso inmediato</div>
+      <div class="pillar-text">Comprás y en segundos tenés acceso. Sin esperas, sin complicaciones.</div>
+    </div>
+    <div class="pillar">
+      <div class="pillar-icon">🛡️</div>
+      <div class="pillar-title">Garantía 30 días</div>
+      <div class="pillar-text">Si no estás satisfecho, te devolvemos el dinero. Sin preguntas.</div>
+    </div>
+  </div>
+</div>
+
+<!-- TESTIMONIALS -->
+<section class="testimonials-section" id="resultados">
+  <div class="section-header fade-up">
+    <div>
+      <div class="section-tag">Testimonios reales</div>
+      <h2 class="section-title">Lo que dicen<br><em>nuestros alumnos</em></h2>
+    </div>
+  </div>
+  <div class="testimonials-grid">
+    <div class="testimonial fade-up">
+      <div class="stars">★★★★★</div>
+      <div class="testimonial-text">"Perdí 11kg en 12 semanas sin pasar hambre. El plan es tan claro que no hay excusa para no seguirlo."</div>
+      <div class="testimonial-author">
+        <div class="author-avatar av1">MR</div>
+        <div>
+          <div class="author-name">Martín R.</div>
+          <div class="author-result">−11kg · Fat Loss Code</div>
+        </div>
+      </div>
+    </div>
+    <div class="testimonial fade-up">
+      <div class="stars">★★★★★</div>
+      <div class="testimonial-text">"Compré el Muscle Blueprint y en 4 meses gané más músculo que en 2 años entrenando sin método."</div>
+      <div class="testimonial-author">
+        <div class="author-avatar av2">SC</div>
+        <div>
+          <div class="author-name">Sofía C.</div>
+          <div class="author-result">+6kg músculo · Muscle Blueprint</div>
+        </div>
+      </div>
+    </div>
+    <div class="testimonial fade-up">
+      <div class="stars">★★★★★</div>
+      <div class="testimonial-text">"El Apex Club vale cada centavo. Tenés todo en un lugar y el soporte de los coaches es increíble."</div>
+      <div class="testimonial-author">
+        <div class="author-avatar av3">LP</div>
+        <div>
+          <div class="author-name">Lucas P.</div>
+          <div class="author-result">Miembro Apex Club</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<div class="cta-section">
+  <div class="section-tag">Empezá hoy</div>
+  <h2>¿Listo para tu<br><em>mejor versión?</em></h2>
+  <p>Más de 12.000 personas ya transformaron su cuerpo con los programas APEX BODY. El siguiente paso es tuyo.</p>
+  <a href="#productos" class="btn-primary-light">Ver todos los programas</a>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <a href="#" class="footer-logo">Apex<span>.</span>Body</a>
+  <p>© 2025 APEX BODY · apexbody.fit · Todos los derechos reservados</p>
+  <div class="footer-links">
+    <a href="#">Términos</a>
+    <a href="#">Privacidad</a>
+    <a href="#">Contacto</a>
+  </div>
+</footer>
+
+<script>
+  // Scroll animations
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) {
+        setTimeout(() => e.target.classList.add('visible'), i * 80);
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
